@@ -68,7 +68,11 @@ export const Messages = {
     ACCOUNT_DELETED: 'account deleted',
     ACCOUNT_UPDATED: 'account updated',
     LOGGED_IN: 'login succeed',
-    EMAIL_EXISTS: 'email exists, try diffrent email'
+    EMAIL_EXISTS: 'email exists, try diffrent email',
+    EMAIL_VERIFIED: 'email already verified',
+    VERIFY_YOUR_EMAIL: 'Verify Your Email',
+    VERIRIFICATION_LINK_SEND: 'verification link has been send',
+    VERIFIED_EMAIL: 'email has been verified'
   },
   warning: {
     INVALID_FULLNAME: 'invalid full name',
@@ -77,7 +81,9 @@ export const Messages = {
     ENTER_EMAIL: 'enter an email',
     SHORT_PASSWORD: 'password must contain 8 characters',
     PASSWORD_NOT_MATCHED: 'password and confirm password does not matched',
-    INVALID_CREDENTIALS: 'invalid login credentials'
+    INVALID_CREDENTIALS: 'invalid login credentials',
+    ACCOUNT_NOT_EXISTS: 'account does not exists',
+    VERIFICATION_LINK_EXPIRE: 'verfication link is broken or invalid'
   },
   error: {
     INTERNAL_SERVER_ERROR: 'something went wrong',

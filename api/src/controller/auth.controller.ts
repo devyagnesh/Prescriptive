@@ -1,9 +1,15 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import crypto from 'crypto'
 import { type Response, type Request, type NextFunction } from 'express'
+import jwt from 'jsonwebtoken'
 import { httpStatusCodes } from '../constants/StatusCodes'
 import { Validator } from '../libs/Validators'
 import { ThrowException } from '../utils/Errors'
 import { Messages } from '../constants/Messages'
 import { User } from '../model/User.model'
+import { EmailVerification } from '../model/EmailVerification.model'
+import MailService from '../services/SendMail'
+import verifyEmail from '../templates/VerifyEmail'
 export const Signup = async (
   req: Request,
   res: Response,
@@ -95,7 +101,26 @@ export const Signup = async (
       email,
       password
     })
-    const token = await user.generateRefreshToken()
+    const { user: newuser, token } = await user.generateRefreshToken()
+
+    const VerificationToken = await new EmailVerification({
+      token: jwt.sign({
+        email,
+        vtoken: crypto.randomBytes(32).toString('hex')
+      }, process.env.JWT_EMAIL_SECRET!)
+    }).save()
+    user.emailVerification = VerificationToken._id
+    await newuser.save()
+    const mailService = MailService.getInstance()
+    const emailVerificationUrl = `http://${req.hostname}:${process.env.PORT}/api/v1/verification/verify/${VerificationToken.token}`
+
+    await mailService.sendMail({
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      from: process.env.SMTP_SENDER!,
+      to: email,
+      subject: Messages.informational.VERIFY_YOUR_EMAIL,
+      html: verifyEmail(emailVerificationUrl).html
+    })
 
     return res.status(httpStatusCodes.SUCCESSFUL.CREATED).json({
       code: httpStatusCodes.SUCCESSFUL.OK,
@@ -133,9 +158,7 @@ export const SignIn = async (
         }
       )
       return
-    } else if (
-      Validator.isEmpty(password)
-    ) {
+    } else if (Validator.isEmpty(password)) {
       ThrowException(
         httpStatusCodes.CLIENT_ERROR.BAD_REQUEST,
         Messages.name.BAD_REQUEST,

@@ -4,9 +4,8 @@ import mongoose, {
   type Model
 } from 'mongoose'
 
-interface IEmailVerification extends Document {
+export interface IEmailVerification extends Document {
   token: string
-  isVerified: boolean
   createdAt: Date
   updatedAt: Date
 }
@@ -16,11 +15,6 @@ const emailVerificationSchema: Schema<IEmailVerification, IEmailVerificationMode
   token: {
     type: String,
     required: true
-  },
-  isVerified: {
-    type: Boolean,
-    required: true,
-    default: false
   },
   createdAt: {
     type: Date,

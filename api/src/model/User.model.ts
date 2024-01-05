@@ -1,23 +1,23 @@
-import crypto from 'crypto'
 import mongoose, {
   type Document,
   type CallbackError,
   type Schema,
   type Model,
-  type ObjectId
+  type PopulatedDoc
 } from 'mongoose'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { EmailVerification } from './EmailVerification.model'
-interface IUser extends Document {
+import { type IEmailVerification } from './EmailVerification.model'
+export interface IUser extends Document {
   fullname: string
   email: string
   password: string
   tokens: Array<{ token: string }>
-  emailVerification: ObjectId
+  emailVerification: PopulatedDoc<IEmailVerification>
+  isEmailVerified: boolean
   createdAt: Date
   updatedAt: Date
-  generateRefreshToken: () => Promise<string>
+  generateRefreshToken: () => Promise<any>
 }
 
 export interface IUserModel extends Model <IUser> {
@@ -48,6 +48,11 @@ const userSchema: Schema<IUser, IUserModel> = new mongoose.Schema<IUser, IUserMo
       type: mongoose.Schema.ObjectId,
       ref: 'EmailVerification'
     },
+    isEmailVerified: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
     tokens: [
       {
         token: {
@@ -65,20 +70,14 @@ userSchema.pre('save', async function (next: (error?: CallbackError) => void) {
     if (this.isModified('password')) {
       this.password = await bcrypt.hash(this.password, 14)
     }
-    // TODO: remove and split it for re-usability
-    const verfication = new EmailVerification({
-      token: crypto.randomBytes(62).toString('hex')
-    })
 
-    const emailVerification = await verfication.save()
-    this.emailVerification = emailVerification._id
     next()
   } catch (error) {
     next(error as CallbackError)
   }
 })
 
-userSchema.methods.generateRefreshToken = async function (): Promise<string> {
+userSchema.methods.generateRefreshToken = async function (): Promise<any> {
   const TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET ?? ''
   const TOKEN_VALIDITY = process.env.REFRESH_TOKEN_VALIDITY ?? ''
 
@@ -91,8 +90,7 @@ userSchema.methods.generateRefreshToken = async function (): Promise<string> {
   )
 
   this.tokens = this.tokens.concat({ token })
-  this.save()
-  return token
+  return { user: this, token }
 }
 
 userSchema.statics.signin = async function (email: string, password: string) {
