@@ -83,7 +83,8 @@ export const Messages = {
     PASSWORD_NOT_MATCHED: 'password and confirm password does not matched',
     INVALID_CREDENTIALS: 'invalid login credentials',
     ACCOUNT_NOT_EXISTS: 'account does not exists',
-    VERIFICATION_LINK_EXPIRE: 'verfication link is broken or invalid'
+    VERIFICATION_LINK_EXPIRE: 'verfication link is broken or invalid',
+    UN_AUTHORIZED: 'unauthorized'
   },
   error: {
     INTERNAL_SERVER_ERROR: 'something went wrong',
