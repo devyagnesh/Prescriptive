@@ -35,12 +35,14 @@ SMTP_USERNAME=<user@example.com>
 SMTP_PASSWORD=<password>
 SMTP_SENDER=<sender>
 SMTP_TLS=true
+```
 
 ## Getting Started
 
 1.**Clone the Repository**:
 
 Begin by cloning the Prescriptive App API repository to your local machine.
+
  ```bash
     git clone https://github.com/devyagnesh/Prescriptive.git
     ```
