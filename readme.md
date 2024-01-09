@@ -44,7 +44,7 @@ SMTP_TLS=true
 Begin by cloning the Prescriptive App API repository to your local machine.
 
 ```bash
-    git clone https://github.com/devyagnesh/Prescriptive.git
+git clone https://github.com/devyagnesh/Prescriptive.git
 ```
 
 2.**Install Dependencies**:
