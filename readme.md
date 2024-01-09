@@ -43,17 +43,18 @@ SMTP_TLS=true
 
 Begin by cloning the Prescriptive App API repository to your local machine.
 
- ```bash
+```bash
     git clone https://github.com/devyagnesh/Prescriptive.git
-    ```
+```
 
 2.**Install Dependencies**:
 Navigate to the project directory and install the necessary dependencies.
 
-  ```bash
-    cd prescriptive/api
-    npm install
-    ```
+```bash
+cd prescriptive/api
+npm install
+```
+
 ## Contact
 
 For any inquiries or support, please contact [yagneshchavda8141@gmail.com](mailto:yagneshchavda8141@gmail.com).
