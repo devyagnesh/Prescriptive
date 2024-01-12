@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Prescriptive</string>
+    <string name="title">Prescriptive</string>
+    <string name="sub_title">Prescription solution</string>
+    <string name="str_btn_get_started">Get Started</string>
+    <string name="version">version 1.0.0</string>
+</resources>

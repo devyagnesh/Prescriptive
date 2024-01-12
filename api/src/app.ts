@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
@@ -7,6 +6,7 @@ import { connectToDatabase } from './config/Database'
 import { errorHandler } from './middlewares/ErrorHandler'
 import AuthRoute from './routes/auth.routes'
 import EmailRoute from './routes/emailVerification.routes'
+
 export const app = express()
 
 app.use(helmet())

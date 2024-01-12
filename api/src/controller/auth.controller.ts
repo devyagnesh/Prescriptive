@@ -113,7 +113,6 @@ export const Signup = async (
     await newuser.save()
     const mailService = MailService.getInstance()
     const emailVerificationUrl = `http://${req.hostname}:${process.env.PORT}/api/v1/verification/verify/${VerificationToken.token}`
-
     await mailService.sendEmailVerificationMail(email, emailVerificationUrl)
 
     return res.status(httpStatusCodes.SUCCESSFUL.CREATED).json({

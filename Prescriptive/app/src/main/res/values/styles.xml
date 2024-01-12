@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="prescriptive">
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textSize">44sp</item>
+        <item name="android:textColor">#5D93FB</item>
+    </style>
+
+    <style name="subtitle">
+            <item name="android:textSize">20sp</item>
+            <item name="android:textColor">#514444</item>
+    </style>
+
+    <style name="style_version">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#514444</item>
+    </style>
+</resources>
