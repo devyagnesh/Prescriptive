@@ -9,7 +9,7 @@ import { Messages } from '../constants/Messages'
 import { User } from '../model/User.model'
 import { EmailVerification } from '../model/EmailVerification.model'
 import MailService from '../services/SendMail'
-import verifyEmail from '../templates/VerifyEmail'
+
 export const Signup = async (
   req: Request,
   res: Response,
@@ -114,13 +114,7 @@ export const Signup = async (
     const mailService = MailService.getInstance()
     const emailVerificationUrl = `http://${req.hostname}:${process.env.PORT}/api/v1/verification/verify/${VerificationToken.token}`
 
-    await mailService.sendMail({
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      from: process.env.SMTP_SENDER!,
-      to: email,
-      subject: Messages.informational.VERIFY_YOUR_EMAIL,
-      html: verifyEmail(emailVerificationUrl).html
-    })
+    await mailService.sendEmailVerificationMail(email, emailVerificationUrl)
 
     return res.status(httpStatusCodes.SUCCESSFUL.CREATED).json({
       code: httpStatusCodes.SUCCESSFUL.OK,

@@ -9,7 +9,6 @@ import { ThrowException } from '../utils/Errors'
 import { httpStatusCodes } from '../constants/StatusCodes'
 import { Messages } from '../constants/Messages'
 import MailService from '../services/SendMail'
-import verifyEmail from '../templates/VerifyEmail'
 import { Validator } from '../libs/Validators'
 
 export const ResendEmail = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
@@ -59,14 +58,7 @@ export const ResendEmail = async (req: Request, res: Response, next: NextFunctio
     await user.save()
     const mailService = MailService.getInstance()
     const emailVerificationUrl = `http://${req.hostname}:${process.env.PORT}/api/v1/verification/verify/${VerificationToken.token}`
-
-    await mailService.sendMail({
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      from: process.env.SMTP_SENDER!,
-      to: email,
-      subject: Messages.informational.VERIFY_YOUR_EMAIL,
-      html: verifyEmail(emailVerificationUrl).html
-    })
+    await mailService.sendEmailVerificationMail(email, emailVerificationUrl)
 
     return res.status(httpStatusCodes.SUCCESSFUL.CREATED).json({
       code: httpStatusCodes.SUCCESSFUL.OK,

@@ -3,6 +3,7 @@ import nodemailer, { type Transporter } from 'nodemailer'
 import { ThrowException } from '../utils/Errors'
 import { httpStatusCodes } from '../constants/StatusCodes'
 import { Messages } from '../constants/Messages'
+import verifyEmail from '../templates/VerifyEmail'
 
 interface MailInterface {
   from: string
@@ -43,7 +44,7 @@ export default class MailService {
     }
   }
 
-  async sendMail (
+  private async sendMail (
     options: MailInterface
   ): Promise<any> {
     if (!await this.verifyTransporter()) {
@@ -58,5 +59,15 @@ export default class MailService {
     })
 
     return information
+  }
+
+  async sendEmailVerificationMail (to: string, verificationLink: string): Promise<any> {
+    return await this.sendMail({
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      from: process.env.SMTP_SENDER!,
+      to,
+      subject: Messages.informational.VERIFY_YOUR_EMAIL,
+      html: verifyEmail(verificationLink).html
+    })
   }
 }
