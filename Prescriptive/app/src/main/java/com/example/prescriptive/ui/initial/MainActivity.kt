@@ -21,12 +21,9 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this, AuthActivity::class.java))
-            finish()
-        }, 1000)
+            Handler(Looper.getMainLooper()).postDelayed({
+                startActivity(Intent(this, AuthActivity::class.java))
+                finish()
+            }, 1000)
     }
-
-
-
 }
