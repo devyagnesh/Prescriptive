@@ -10,17 +10,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background"
         android:gravity="center"
         android:orientation="vertical"
-        tools:context=".MainActivity">
+        tools:context=".ui.initial.MainActivity">
 
         <TextView
             android:id="@+id/prescriptive_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:fontFamily="@font/roboto_bold"
+            android:fontFamily="@font/roboto_black"
             android:text="@string/title"
             android:textAppearance="@style/prescriptive"
             app:layout_constraintBottom_toTopOf="@+id/materialDivider"
@@ -34,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
-            android:fontFamily="@font/roboto"
+            android:fontFamily="@font/roboto_regular"
             android:gravity="top"
             android:text="@string/sub_title"
             android:textAppearance="@style/subtitle"
@@ -47,39 +46,24 @@
             android:id="@+id/materialDivider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             app:dividerColor="#00FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:background="@drawable/button_primary"
-            android:elevation="32dp"
-            android:text="@string/str_btn_get_started"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.495"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/materialDivider"
-            app:layout_constraintVertical_bias="0.44" />
 
         <TextView
             android:id="@+id/version_1_0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto"
+            android:fontFamily="@font/roboto_regular"
             android:text="@string/version"
             android:textAppearance="@style/style_version"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button" />
+            app:layout_constraintTop_toBottomOf="@+id/materialDivider"
+            app:layout_constraintVertical_bias="0.75" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

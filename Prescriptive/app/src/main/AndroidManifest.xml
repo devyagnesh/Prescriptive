@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -17,10 +18,14 @@
         android:theme="@style/Theme.Prescriptive"
         tools:targetApi="31">
         <activity
-            android:name=".BaseActivity"
+            android:name=".ui.auth.AuthActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".ui.base.BaseActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.initial.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
