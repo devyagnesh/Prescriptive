@@ -103,7 +103,7 @@ userSchema.statics.signin = async function (email: string, password: string) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const isPasswordMatched = await bcrypt.compare(password, user.password)
 
-  if (isPasswordMatched === null) return null
+  if (!isPasswordMatched) return null
 
   return user
 }

@@ -180,12 +180,11 @@ export const SignIn = async (
       return
     }
     const token = await user.generateRefreshToken()
-
     return res.status(httpStatusCodes.SUCCESSFUL.CREATED).json({
       code: httpStatusCodes.SUCCESSFUL.OK,
       name: Messages.name.ACCEPTED,
       message: Messages.informational.LOGGED_IN,
-      token
+      token: token.token
     })
   } catch (error) {
     next(error)
