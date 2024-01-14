@@ -1,0 +1,23 @@
+{
+  "name": "queues",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Queue.js",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "node dist/Queue.js",
+    "dev": "nodemon Queue.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/nodemailer": "^6.4.14",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "bullmq": "^5.1.1",
+    "dotenv": "^16.3.1",
+    "nodemailer": "^6.9.8"
+  }
+}

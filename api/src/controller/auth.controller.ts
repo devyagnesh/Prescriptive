@@ -8,7 +8,15 @@ import { ThrowException } from '../utils/Errors'
 import { Messages } from '../constants/Messages'
 import { User } from '../model/User.model'
 import { EmailVerification } from '../model/EmailVerification.model'
-import MailService from '../services/SendMail'
+import { Queue } from 'bullmq'
+import verifyEmail from '../templates/VerifyEmail'
+
+const emailQueue = new Queue('email-queue', {
+  connection: {
+    host: 'localhost',
+    port: 6379
+  }
+})
 
 export const Signup = async (
   req: Request,
@@ -111,10 +119,11 @@ export const Signup = async (
     }).save()
     user.emailVerification = VerificationToken._id
     await newuser.save()
-    const mailService = MailService.getInstance()
     const emailVerificationUrl = `http://${req.hostname}:${process.env.PORT}/api/v1/verification/verify/${VerificationToken.token}`
-    await mailService.sendEmailVerificationMail(email, emailVerificationUrl)
-
+    await emailQueue.add(email, {
+      to: email,
+      html: verifyEmail(emailVerificationUrl)
+    })
     return res.status(httpStatusCodes.SUCCESSFUL.CREATED).json({
       code: httpStatusCodes.SUCCESSFUL.OK,
       name: Messages.name.ACCEPTED,
