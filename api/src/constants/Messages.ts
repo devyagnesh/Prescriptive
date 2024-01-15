@@ -84,7 +84,10 @@ export const Messages = {
     INVALID_CREDENTIALS: 'invalid login credentials',
     ACCOUNT_NOT_EXISTS: 'account does not exists',
     VERIFICATION_LINK_EXPIRE: 'verfication link is broken or invalid',
-    UN_AUTHORIZED: 'unauthorized'
+    UN_AUTHORIZED: 'unauthorized',
+    INVALID_STORE_NAME: 'invalid store name',
+    INVALID_ADDRESSLINE_1: 'invalid or empty addressline 1',
+    INVALID_PHONE_NUMBER: 'invalid or empty phone number'
   },
   error: {
     INTERNAL_SERVER_ERROR: 'something went wrong',

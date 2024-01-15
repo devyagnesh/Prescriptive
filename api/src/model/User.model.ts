@@ -14,6 +14,7 @@ export interface IUser extends Document {
   password: string
   tokens: Array<{ token: string }>
   emailVerification: PopulatedDoc<IEmailVerification>
+  Store: PopulatedDoc<IEmailVerification>
   isEmailVerified: boolean
   createdAt: Date
   updatedAt: Date
@@ -53,6 +54,10 @@ const userSchema: Schema<IUser, IUserModel> = new mongoose.Schema<IUser, IUserMo
       required: true,
       default: false
     },
+    Store: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Store'
+    },
     tokens: [
       {
         token: {
@@ -62,15 +67,14 @@ const userSchema: Schema<IUser, IUserModel> = new mongoose.Schema<IUser, IUserMo
       }
     ]
   },
-  { timestamps: true }
+  { timestamps: true, autoIndex: true }
 )
 
 userSchema.pre('save', async function (next: (error?: CallbackError) => void) {
   try {
     if (this.isModified('password')) {
-      this.password = await bcrypt.hash(this.password, 14)
+      this.password = await bcrypt.hash(this.password, 8)
     }
-
     next()
   } catch (error) {
     next(error as CallbackError)
@@ -97,14 +101,10 @@ userSchema.statics.signin = async function (email: string, password: string) {
   const user = await this.findOne({
     email
   })
-
   if (user === null) return null
-
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const isPasswordMatched = await bcrypt.compare(password, user.password)
-
   if (!isPasswordMatched) return null
-
   return user
 }
 
