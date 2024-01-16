@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-escape */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class Validator {
   /**
@@ -64,46 +63,5 @@ export class Validator {
   public static isAlphabetic (input: string, includeSpaces: boolean = true): boolean {
     const regexPattern = includeSpaces ? /^[a-zA-Z\s]+$/ : /^[a-zA-Z]+$/
     return regexPattern.test(input.trim())
-  }
-
-  /**
- * Checks if a given string consists of alphabetic characters, numeric values, and spaces.
- *
- * @param {string} input - The input string to be validated.
- *
- * @returns {boolean} Returns `true` if the input string consists only of alphabetic characters, numeric values, and spaces,
- *   otherwise returns `false`.
- *
- * @example
- * // Example with spaces, alphabets, and numeric values
- * const result = StringValidator.isAlphaNumericWithSpaces("Hello 123");
- * console.log(result); // true
- */
-  public static isAlphaNumericWithSpaces (input: string): boolean {
-    const regexPattern = /^[a-zA-Z0-9\s]+$/
-    return regexPattern.test(input.trim())
-  }
-
-  /**
- * Checks if a given string represents a valid phone number with support for various formats.
- *
- * @param {string} phoneNumber - The input string to be validated as a phone number.
- *
- * @returns {boolean} Returns `true` if the input string represents a valid phone number, otherwise returns `false`.
- *
- * @example
- * // Example with a valid phone number
- * const resultValid = StringValidator.isValidPhoneNumber("+1 (123) 456-7890");
- * console.log(resultValid); // true
- *
- * @example
- * // Example with an invalid phone number
- * const resultInvalid = StringValidator.isValidPhoneNumber("123-456-7890");
- * console.log(resultInvalid); // false
- */
-  public static isValidPhoneNumber (phoneNumber: string): boolean {
-  // This regex allows for various phone number formats
-    const regexPattern = /^(\+?\d{1,4}[\s\.-]?)?(\()?\d{1,}(\))?[\s\.-]?\d{1,}[\s\.-]?\d{1,}[\s\.-]?\d{1,}$/
-    return regexPattern.test(phoneNumber.trim())
   }
 }
