@@ -18,7 +18,8 @@ The Prescriptive App API is a powerful tool designed to simplify and streamline 
 - **Express.js**: A web application framework for Node.js, providing a robust set of features for web and mobile applications.
 - **MongoDB**: A NoSQL database for storing and retrieving customer and prescription data efficiently.
 - **TypeScript**: Enhance code readability, maintainability, and scalability by using TypeScript to add static typing to your JavaScript code.
-
+- **Redis**: caching data and improve response time.
+- **BullMq**: decoupling low prioritized tasks such as send emails and sms and improve api response time
 ## Environment Variables
 
 Create a `.env` file in the root of your project with the following variables:
