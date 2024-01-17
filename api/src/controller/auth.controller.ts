@@ -8,15 +8,10 @@ import { ThrowException } from '../utils/Errors'
 import { Messages } from '../constants/Messages'
 import { User } from '../model/User.model'
 import { EmailVerification } from '../model/EmailVerification.model'
-import { Queue } from 'bullmq'
 import verifyEmail from '../templates/VerifyEmail'
+import CreateQueue from 'src/services/Queue/CreateQueue'
 
-const emailQueue = new Queue('email-queue', {
-  connection: {
-    host: 'localhost',
-    port: 6379
-  }
-})
+const emailQueue = CreateQueue.getInstance().addTaskToQueue('email-queue')
 
 export const Signup = async (
   req: Request,

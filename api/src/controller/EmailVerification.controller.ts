@@ -8,9 +8,11 @@ import { User } from '../model/User.model'
 import { ThrowException } from '../utils/Errors'
 import { httpStatusCodes } from '../constants/StatusCodes'
 import { Messages } from '../constants/Messages'
-import MailService from '../services/SendMail'
 import { Validator } from '../libs/Validators'
+import CreateQueue from 'src/services/Queue/CreateQueue'
+import verifyEmail from 'src/templates/VerifyEmail'
 
+const emailQueue = CreateQueue.getInstance().addTaskToQueue('email-queue')
 export const ResendEmail = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   try {
     interface IBody {
@@ -56,9 +58,12 @@ export const ResendEmail = async (req: Request, res: Response, next: NextFunctio
     }).save()
     user.emailVerification = VerificationToken._id
     await user.save()
-    const mailService = MailService.getInstance()
     const emailVerificationUrl = `http://${req.hostname}:${process.env.PORT}/api/v1/verification/verify/${VerificationToken.token}`
-    await mailService.sendEmailVerificationMail(email, emailVerificationUrl)
+
+    await emailQueue.add(email, {
+      to: email,
+      html: verifyEmail(emailVerificationUrl)
+    })
 
     return res.status(httpStatusCodes.SUCCESSFUL.CREATED).json({
       code: httpStatusCodes.SUCCESSFUL.OK,
