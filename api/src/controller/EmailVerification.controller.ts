@@ -9,8 +9,8 @@ import { ThrowException } from '../utils/Errors'
 import { httpStatusCodes } from '../constants/StatusCodes'
 import { Messages } from '../constants/Messages'
 import { Validator } from '../libs/Validators'
-import CreateQueue from 'src/services/Queue/CreateQueue'
-import verifyEmail from 'src/templates/VerifyEmail'
+import CreateQueue from '../services/Queue/CreateQueue'
+import verifyEmail from '../templates/VerifyEmail'
 
 const emailQueue = CreateQueue.getInstance().addTaskToQueue('email-queue')
 export const ResendEmail = async (req: Request, res: Response, next: NextFunction): Promise<any> => {

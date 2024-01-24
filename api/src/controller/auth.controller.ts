@@ -9,7 +9,7 @@ import { Messages } from '../constants/Messages'
 import { User } from '../model/User.model'
 import { EmailVerification } from '../model/EmailVerification.model'
 import verifyEmail from '../templates/VerifyEmail'
-import CreateQueue from 'src/services/Queue/CreateQueue'
+import CreateQueue from '../services/Queue/CreateQueue'
 
 const emailQueue = CreateQueue.getInstance().addTaskToQueue('email-queue')
 

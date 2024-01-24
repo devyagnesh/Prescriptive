@@ -7,8 +7,8 @@ export default class SmsService{
   private client: Twilio = new Twilio;
   private static instance: SmsService | null
   private constructor(){
-    this.accountSid= process.env.TWILIO_ID
-    this.authToken = process.env.TWILIO_AUTH_KEY
+    this.accountSid= process.env.ACCOUNT_SID
+    this.authToken = process.env.AUTH_TOKEN
     this.from = process.env.TWILIO_NUMBER
     this.client = twillio(this.accountSid,this.authToken)
   }
@@ -26,7 +26,7 @@ export default class SmsService{
       this.client.messages.create({
         body:message,
         to:to,
-        from:this.from
+        from:`whatsapp:${process.env.TWILIO_NUMBER}`
       })
     } catch (error) {
       console.log(error)
