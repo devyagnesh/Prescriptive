@@ -13,6 +13,7 @@ import com.example.prescriptive.data.ErrorResponse
 import com.example.prescriptive.databinding.FragmentLoginBinding
 import com.example.prescriptive.interfaces.FragmentNavigationListener
 import com.example.prescriptive.repository.AuthRepository
+import com.example.prescriptive.ui.loading.LoadingDialogFragment
 import com.example.prescriptive.utils.SharedPreference
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -38,7 +39,7 @@ class LoginFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -51,40 +52,48 @@ class LoginFragment : Fragment() {
         val ButtonLogin = binding.BtnLogin
         val ButtonSignup = binding.BtnSignup
         val ViewBtnResetPass = binding.btnReset
-
+        val sharePreference = SharedPreference(requireContext())
         ButtonLogin.setOnClickListener {
-            if(this.validateInput(EditEmail.text.toString(), EditPassword.text.toString().trim())){
-
+            val loadingDialog = LoadingDialogFragment()
+            if (this.validateInput(EditEmail.text.toString(), EditPassword.text.toString().trim())) {
+                loadingDialog.show(parentFragmentManager, "loading_dialog")
                 viewLifecycleOwner.lifecycleScope.launch {
-                   try {
-                       val authRepo = AuthRepository()
-                       val response = authRepo.SignIn(EditEmail.text.toString().trim(), EditPassword.text.toString().trim())
+                    try {
+                        val authRepo = AuthRepository()
+                        val response = authRepo.SignIn(EditEmail.text.toString().trim(), EditPassword.text.toString().trim())
 
+                        loadingDialog.dismiss()
 
-                       if (response != null) {
+                        if (response != null) {
+                            if (response.isSuccessful) {
+                                val body = response.body()
+                                if (body != null) {
+                                    sharePreference.put("authToken", body.token)
+                                    Toast.makeText(requireContext(), body.message, Toast.LENGTH_SHORT).show()
+                                    Log.d("HETO",SharedPreference(requireContext()).getString("authToken").toString())
 
-                           if(response.body() === null && response.errorBody() !== null){
-                               val jsonError = JSONObject(
-                                   response.errorBody()!!.string()
-                               )
-                               Toast.makeText(requireContext(), jsonError.getString("message"), Toast.LENGTH_SHORT).show()
-                           }
-
-                           response.body()?.let { it1 ->
-                               SharedPreference(requireContext()).put("authToken",
-                                   it1.token)
-                               Toast.makeText(requireContext(), it1.message, Toast.LENGTH_SHORT).show()
-                           }
-                       }
-                   }catch (e:Exception){
-                       Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show()
-                   }
-
+                                } else {
+                                    Toast.makeText(requireContext(), "Unexpected response from server", Toast.LENGTH_SHORT).show()
+                                }
+                            } else {
+                                val errorBody = response.errorBody()?.string()
+                                val errorMessage = if (errorBody != null) {
+                                    JSONObject(errorBody).getString("message")
+                                } else {
+                                    "An error occurred"
+                                }
+                                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    } catch (e: Exception) {
+                        loadingDialog.dismiss()
+                        Log.d("HETO", e.toString())
+                        Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show()
+                    }
                 }
-
             }
-
         }
+
 
         ButtonSignup.setOnClickListener {
             fragmentNavigationListener.changeFragment(1,SignUpFragment())
