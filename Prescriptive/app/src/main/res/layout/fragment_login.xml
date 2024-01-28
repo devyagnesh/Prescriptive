@@ -15,6 +15,7 @@
         tools:context=".ui.auth.LoginFragment">
 
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/txtLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/style_auth_title"
@@ -24,6 +25,7 @@
             android:text="@string/str_login_account" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/InputLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
@@ -44,6 +46,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/InputPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -65,6 +68,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
+            android:id="@+id/ResetPassWrapper"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -72,6 +76,7 @@
             android:layout_gravity="end">
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/txtForgetPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/dark"
@@ -102,7 +107,7 @@
 
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/BtnSignup"
+            android:id="@+id/BtnGoToSignup"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"

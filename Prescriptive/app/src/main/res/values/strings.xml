@@ -12,4 +12,5 @@
     <string name="str_forget_password">Forget password?</string>
     <string name="str_forget_password_reset">Reset here</string>
     <string name="str_create_new_account">Create an account</string>
+    <string name="str_fullname">Fullname</string>
 </resources>

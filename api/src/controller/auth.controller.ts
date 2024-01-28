@@ -123,7 +123,8 @@ export const Signup = async (
       code: httpStatusCodes.SUCCESSFUL.OK,
       name: Messages.name.ACCEPTED,
       message: Messages.informational.ACCOUNT_CREATED,
-      token
+      token,
+      isVerified: user.isEmailVerified
     })
   } catch (error) {
     next(error)
@@ -188,7 +189,8 @@ export const SignIn = async (
       code: httpStatusCodes.SUCCESSFUL.OK,
       name: Messages.name.ACCEPTED,
       message: Messages.informational.LOGGED_IN,
-      token: token.token
+      token: token.token,
+      isVerified: user.isEmailVerified
     })
   } catch (error) {
     next(error)

@@ -50,7 +50,7 @@ class LoginFragment : Fragment() {
         val EditEmail = binding.idLoginEmail
         val EditPassword = binding.idLoginPassword
         val ButtonLogin = binding.BtnLogin
-        val ButtonSignup = binding.BtnSignup
+        val ButtonSignup = binding.BtnGoToSignup
         val ViewBtnResetPass = binding.btnReset
         val sharePreference = SharedPreference(requireContext())
         ButtonLogin.setOnClickListener {
