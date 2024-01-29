@@ -70,7 +70,7 @@ class LoginFragment : Fragment() {
                                 if (body != null) {
                                     sharePreference.put("authToken", body.token)
                                     Toast.makeText(requireContext(), body.message, Toast.LENGTH_SHORT).show()
-                                    Log.d("HETO",SharedPreference(requireContext()).getString("authToken").toString())
+
 
                                 } else {
                                     Toast.makeText(requireContext(), "Unexpected response from server", Toast.LENGTH_SHORT).show()
@@ -87,7 +87,6 @@ class LoginFragment : Fragment() {
                         }
                     } catch (e: Exception) {
                         loadingDialog.dismiss()
-                        Log.d("HETO", e.toString())
                         Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show()
                     }
                 }

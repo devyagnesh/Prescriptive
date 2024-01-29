@@ -1,5 +1,4 @@
 package com.example.prescriptive.ui.auth
-
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
@@ -32,10 +31,6 @@ class AuthActivity : BaseActivity(), FragmentNavigationListener {
         pagerAdapter.addFragment(LoginFragment())
         pagerAdapter.addFragment(SignUpFragment())
         fragmentPager.adapter = pagerAdapter
-
-
-
-
     }
 
 
