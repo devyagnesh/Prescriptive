@@ -24,10 +24,10 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        onBackPressedDispatcher.addCallback(this /* lifecycle owner */, object : OnBackPressedCallback(true) {
+        onBackPressedDispatcher.addCallback(this , object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if(backPressCount > 0){
-                    Toast.makeText(this@BaseActivity, "Press Back $backPressCount More Time" , Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@BaseActivity, "$backPressCount more time" , Toast.LENGTH_SHORT).show()
                     backPressCount--
                     return
                 }

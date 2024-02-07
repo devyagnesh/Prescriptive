@@ -2,6 +2,7 @@ package com.example.prescriptive.repository
 
 import android.util.Log
 import com.example.prescriptive.data.SignInRequestBody
+import com.example.prescriptive.data.SignupRequestBody
 import com.example.prescriptive.data.SuccessResponse
 import com.example.prescriptive.services.AuthService
 import com.example.prescriptive.singleton.RetrofitClient
@@ -23,5 +24,13 @@ class AuthRepository {
             Gson().toJson(SignInRequestBody(email,password))
         )
         return apiService?.SignIn(requestBody)
+    }
+
+    suspend fun SignUp(fullname:String,email: String,password: String,confirmPassword:String): Response<SuccessResponse>?{
+        val requestBody = RequestBody.create(
+            MediaType.parse("application/json"), // Specify JSON format
+            Gson().toJson(SignupRequestBody(fullname,email,password,confirmPassword))
+        )
+        return apiService?.SignUp(requestBody)
     }
 }

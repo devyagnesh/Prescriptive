@@ -71,7 +71,6 @@ class LoginFragment : Fragment() {
                                     sharePreference.put("authToken", body.token)
                                     Toast.makeText(requireContext(), body.message, Toast.LENGTH_SHORT).show()
 
-
                                 } else {
                                     Toast.makeText(requireContext(), "Unexpected response from server", Toast.LENGTH_SHORT).show()
                                 }

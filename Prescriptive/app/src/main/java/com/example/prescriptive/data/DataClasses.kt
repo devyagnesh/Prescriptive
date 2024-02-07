@@ -21,3 +21,10 @@ data class SignInRequestBody(
     val email: String,
     val password: String
 )
+
+data class SignupRequestBody(
+    val fullname : String,
+    val email:String,
+    val password: String,
+    val confirmPassword:String
+)
