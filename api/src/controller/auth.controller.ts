@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import crypto from 'crypto'
 import { type Response, type Request, type NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import { httpStatusCodes } from '../constants/StatusCodes'
@@ -10,6 +9,7 @@ import { User } from '../model/User.model'
 import { EmailVerification } from '../model/EmailVerification.model'
 import verifyEmail from '../templates/VerifyEmail'
 import CreateQueue from '../services/Queue/CreateQueue'
+import { Helper } from '../libs/Helper'
 
 const emailQueue = CreateQueue.getInstance().addTaskToQueue('email-queue')
 
@@ -106,18 +106,18 @@ export const Signup = async (
     })
     const { user: newuser, token } = await user.generateRefreshToken()
 
+    const FourDigitToken = Helper.generateUniqueNumber()
     const VerificationToken = await new EmailVerification({
       token: jwt.sign({
         email,
-        vtoken: crypto.randomBytes(32).toString('hex')
+        vtoken: FourDigitToken
       }, process.env.JWT_EMAIL_SECRET!)
     }).save()
     user.emailVerification = VerificationToken._id
     await newuser.save()
-    const emailVerificationUrl = `http://${req.hostname}:${process.env.PORT}/api/v1/verification/verify/${VerificationToken.token}`
     await emailQueue.add(email, {
       to: email,
-      html: verifyEmail(emailVerificationUrl)
+      html: verifyEmail(FourDigitToken)
     })
     return res.status(httpStatusCodes.SUCCESSFUL.CREATED).json({
       code: httpStatusCodes.SUCCESSFUL.OK,

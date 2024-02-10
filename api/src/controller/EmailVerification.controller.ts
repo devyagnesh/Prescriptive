@@ -1,6 +1,5 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import crypto from 'crypto'
 import { type NextFunction, type Request, type Response } from 'express'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 import { EmailVerification } from '../model/EmailVerification.model'
@@ -11,6 +10,7 @@ import { Messages } from '../constants/Messages'
 import { Validator } from '../libs/Validators'
 import CreateQueue from '../services/Queue/CreateQueue'
 import verifyEmail from '../templates/VerifyEmail'
+import { Helper } from '..//libs/Helper'
 
 const emailQueue = CreateQueue.getInstance().addTaskToQueue('email-queue')
 export const ResendEmail = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
@@ -49,27 +49,27 @@ export const ResendEmail = async (req: Request, res: Response, next: NextFunctio
       return
     }
     // store token in document
+    const FourDigitToken = Helper.generateUniqueNumber()
+
     const VerificationToken = await new EmailVerification({
       token: jwt.sign({
         email,
-        vtoken: crypto.randomBytes(32).toString('hex')
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        vtoken: FourDigitToken
       }, process.env.JWT_EMAIL_SECRET!)
     }).save()
     user.emailVerification = VerificationToken._id
     await user.save()
-    const emailVerificationUrl = `http://${req.hostname}:${process.env.PORT}/api/v1/verification/verify/${VerificationToken.token}`
 
     await emailQueue.add(email, {
       to: email,
-      html: verifyEmail(emailVerificationUrl)
+      html: verifyEmail(FourDigitToken)
     })
 
     return res.status(httpStatusCodes.SUCCESSFUL.CREATED).json({
       code: httpStatusCodes.SUCCESSFUL.OK,
       name: Messages.name.ACCEPTED,
-      message: Messages.informational.VERIRIFICATION_LINK_SEND
-
+      message: Messages.informational.VERIRIFICATION_LINK_SEND,
+      token: VerificationToken.token
     })
   } catch (error) {
     next(error)
@@ -78,28 +78,32 @@ export const ResendEmail = async (req: Request, res: Response, next: NextFunctio
 
 export const confirmEmail = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   try {
-    const { token } = req.params
+    const { token, code } = req.body
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const payload: JwtPayload | null = jwt.decode(token) as JwtPayload
-
     if (payload === undefined || payload === null) {
       ThrowException(httpStatusCodes.CLIENT_ERROR.BAD_REQUEST, Messages.name.BAD_REQUEST, Messages.warning.VERIFICATION_LINK_EXPIRE)
       return
     }
 
+    if ((code == undefined) || code === '') {
+      ThrowException(httpStatusCodes.CLIENT_ERROR.BAD_REQUEST, Messages.name.BAD_REQUEST, Messages.warning.VERIFICATION_TOKEN_REQUIRED)
+      return
+    }
     const findUser = await User.findOne({ email: 'email' in payload ? payload.email : '' }).populate('emailVerification').exec()
-
     if (findUser?.isEmailVerified === true) {
       ThrowException(httpStatusCodes.CLIENT_ERROR.BAD_REQUEST, Messages.name.BAD_REQUEST, Messages.informational.EMAIL_VERIFIED)
       return
     }
     if (findUser?.emailVerification === undefined || findUser.emailVerification === null || findUser === undefined) {
+      console.log('came here')
       ThrowException(httpStatusCodes.CLIENT_ERROR.BAD_REQUEST, Messages.name.BAD_REQUEST, Messages.warning.VERIFICATION_LINK_EXPIRE)
       return
     }
 
     const storedPayload: JwtPayload | null = jwt.decode(findUser.emailVerification?.token as string) as JwtPayload
-    if (storedPayload.vtoken !== payload.vtoken) {
+    if (Number(storedPayload.vtoken) !== Number(code)) {
       ThrowException(httpStatusCodes.CLIENT_ERROR.BAD_REQUEST, Messages.name.BAD_REQUEST, Messages.warning.VERIFICATION_LINK_EXPIRE)
       return
     }
@@ -109,7 +113,6 @@ export const confirmEmail = async (req: Request, res: Response, next: NextFuncti
       code: httpStatusCodes.SUCCESSFUL.OK,
       name: Messages.name.ACCEPTED,
       message: Messages.informational.VERIFIED_EMAIL
-
     })
   } catch (error) {
     next(error)

@@ -19,7 +19,7 @@ const emailVerificationSchema: Schema<IEmailVerification, IEmailVerificationMode
   createdAt: {
     type: Date,
     default: Date.now(),
-    expires: '10m'
+    expires: '5m'
   }
 }, { timestamps: true })
 

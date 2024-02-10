@@ -2,7 +2,7 @@ interface IEmailVerify {
   html: string
   text: string
 }
-const verifyEmail = function (link: string): IEmailVerify {
+const verifyEmail = function (code: number): IEmailVerify {
   const html = `
     <!DOCTYPE html>
     <html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -111,7 +111,7 @@ const verifyEmail = function (link: string): IEmailVerify {
 Use this link to confirm your account and log in
                           </p>
 
-                          <lable style="display: block; font-size: 24px; line-height: 100%; margin-bottom: 24px; --text-opacity: 1; color: #000000; text-decoration: none;">${link}</lable>
+                          <lable style="display: block; font-size: 24px; line-height: 100%; margin-bottom: 24px; --text-opacity: 1; color: #000000; text-decoration: none;">${code}</lable>
                           <table style="font-family: 'Montserrat',Arial,sans-serif;" cellpadding="0" cellspacing="0"
                             role="presentation">
                             <tr>

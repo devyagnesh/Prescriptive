@@ -4,5 +4,5 @@ import { ResendEmail, confirmEmail } from '../controller/EmailVerification.contr
 const route = Router()
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-route.post('/resend', ResendEmail).get('/verify/:token', confirmEmail)
+route.post('/resend', ResendEmail).get('/verify/', confirmEmail)
 export default route

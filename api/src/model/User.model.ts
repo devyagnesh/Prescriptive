@@ -46,7 +46,8 @@ const userSchema: Schema<IUser, IUserModel> = new mongoose.Schema<IUser, IUserMo
     },
     emailVerification: {
       type: mongoose.Schema.ObjectId,
-      ref: 'EmailVerification'
+      ref: 'EmailVerification',
+      expires: '5m'
     },
     isEmailVerified: {
       type: Boolean,
@@ -70,7 +71,6 @@ userSchema.pre('save', async function (next: (error?: CallbackError) => void) {
     if (this.isModified('password')) {
       this.password = await bcrypt.hash(this.password, 14)
     }
-
     next()
   } catch (error) {
     next(error as CallbackError)
