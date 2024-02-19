@@ -18,14 +18,12 @@ export const IsAuthenticated = async (req: IRequest, _res: Response, next: NextF
     const header = req.headers.authorization
 
     if (header === null || header === undefined) {
-      ThrowException(httpStatusCodes.CLIENT_ERROR.FORBIDDEN, Messages.name.FORBIDDEN, Messages.warning.UN_AUTHORIZED)
-      return
+      ThrowException(httpStatusCodes.CLIENT_ERROR.FORBIDDEN, Messages.name.FORBIDDEN, Messages.warning.UN_AUTHORIZED, false)
     }
     const token = header?.split(' ')[1]
 
     if (token === null || token === undefined) {
-      ThrowException(httpStatusCodes.CLIENT_ERROR.FORBIDDEN, Messages.name.FORBIDDEN, Messages.warning.UN_AUTHORIZED)
-      return
+      ThrowException(httpStatusCodes.CLIENT_ERROR.FORBIDDEN, Messages.name.FORBIDDEN, Messages.warning.UN_AUTHORIZED, false)
     }
 
     try {
@@ -35,14 +33,7 @@ export const IsAuthenticated = async (req: IRequest, _res: Response, next: NextF
       const user = await User.findOne({ _id: decoded.uid }).exec()
 
       if (user === undefined || user === null) {
-        ThrowException(httpStatusCodes.CLIENT_ERROR.FORBIDDEN, Messages.name.FORBIDDEN, Messages.warning.UN_AUTHORIZED)
-        return
-      }
-
-      const isTokenExists = user.tokens.find((dbToken) => dbToken.token === token)
-
-      if (isTokenExists === null || isTokenExists === undefined) {
-        ThrowException(httpStatusCodes.CLIENT_ERROR.FORBIDDEN, Messages.name.FORBIDDEN, Messages.warning.UN_AUTHORIZED)
+        ThrowException(httpStatusCodes.CLIENT_ERROR.FORBIDDEN, Messages.name.FORBIDDEN, Messages.warning.UN_AUTHORIZED, false)
         return
       }
 
@@ -51,12 +42,10 @@ export const IsAuthenticated = async (req: IRequest, _res: Response, next: NextF
       next()
     } catch (error) {
       if (error instanceof JsonWebTokenError) {
-        ThrowException(httpStatusCodes.CLIENT_ERROR.FORBIDDEN, Messages.name.FORBIDDEN, Messages.warning.UN_AUTHORIZED)
-        return
+        ThrowException(httpStatusCodes.CLIENT_ERROR.FORBIDDEN, Messages.name.FORBIDDEN, Messages.warning.UN_AUTHORIZED, true)
       }
     }
   } catch (error) {
     next(error)
-    return
   }
 }

@@ -53,15 +53,7 @@ const userSchema: Schema<IUser, IUserModel> = new mongoose.Schema<IUser, IUserMo
       type: Boolean,
       required: true,
       default: false
-    },
-    tokens: [
-      {
-        token: {
-          type: String,
-          required: true
-        }
-      }
-    ]
+    }
   },
   { timestamps: true }
 )
@@ -89,7 +81,6 @@ userSchema.methods.generateRefreshToken = async function (): Promise<any> {
     { expiresIn: TOKEN_VALIDITY }
   )
 
-  this.tokens = this.tokens.concat({ token })
   return { user: this, token }
 }
 

@@ -107,13 +107,13 @@ export const Signup = async (
     const { user: newuser, token } = await user.generateRefreshToken()
 
     const FourDigitToken = Helper.generateUniqueNumber()
-    const VerificationToken = await new EmailVerification({
+    const verificationToken = await new EmailVerification({
       token: jwt.sign({
         email,
         vtoken: FourDigitToken
       }, process.env.JWT_EMAIL_SECRET!)
     }).save()
-    user.emailVerification = VerificationToken._id
+    user.emailVerification = verificationToken._id
     await newuser.save()
     await emailQueue.add(email, {
       to: email,
@@ -124,6 +124,7 @@ export const Signup = async (
       name: Messages.name.ACCEPTED,
       message: Messages.informational.ACCOUNT_CREATED,
       token,
+      verificationToken,
       isVerified: user.isEmailVerified
     })
   } catch (error) {
